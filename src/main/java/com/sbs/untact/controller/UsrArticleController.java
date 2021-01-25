@@ -63,5 +63,44 @@ public class UsrArticleController {
 		
 	}
 	
+	
+	
+	@RequestMapping("/usr/board/doDelete")
+	@ResponseBody
+	public Map<String, Object> doDelete(int id) {
+		
+		boolean deleteArticleRs = deleteArticle(id);
+		
+		Map<String, Object> rs = new HashMap<>();
+		
+		if(deleteArticleRs) {
+			rs.put("resultCode", "S-1");
+			rs.put("msg", "성공");
+			
+		}else {
+			rs.put("resultCode", "F-1");
+			rs.put("msg", "존재하지않음");
+		}
+		
+		rs.put("id", id);
+		
+		return rs; 
+		
+	}
+
+
+	private boolean deleteArticle(int id) {
+		
+		for(Article article : articles) {
+			
+			if(article.getId() == id) {
+				articles.remove(article);
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 
 }
