@@ -64,12 +64,9 @@ public class UsrArticleController {
 		
 		articles.add(new Article(++ArticlesLastId, regDate, updateDate, title, body));
 		
-		Map<String, Object> rs = new HashMap<>();
-		rs.put("resultCode", "S-1");
-		rs.put("msg", "성공");
-		rs.put("id", ArticlesLastId);
-
-		return rs;
+	
+		
+		return Util.mapOf("resultCode", "S-1","msg", "성공","id", ArticlesLastId);
 
 	}
 
@@ -85,17 +82,12 @@ public class UsrArticleController {
 		
 		Map<String, Object> rs = new HashMap<>();
 		
-		if(deleteArticleRs ) {
-			rs.put("resultCode", "S-1");
-			rs.put("msg", "성공 하였습니다.");	
-		}else {
-			rs.put("resultCode", "F-1");
-			rs.put("msg", "해당 게시물은 존재하지 않습니다.");	
+		if (deleteArticleRs == false) {
+			return Util.mapOf("resultCode", "F-1", "msg", "해당 게시물은 존재하지 않습니다.");
+
+		} else {
+			return Util.mapOf("resultCode", "S-1", "msg", "성공 하였습니다.", "id", id);
 		}
-		
-		rs.put("id", id);
-		
-		return rs;
 		
 		
 	}
@@ -130,9 +122,7 @@ public class UsrArticleController {
 		Map<String, Object> rs = new HashMap<>();
 		
 		if(selarticle == null ) {
-			rs.put("resultCode", "F-1");
-			rs.put("msg", String.format("%d 번 게시물은 존재하지 않습니다.", id));
-			return rs;
+			return Util.mapOf("resultCode", "F-1","msg", String.format("%d 번 게시물은 존재하지 않습니다.", id));
 		}
 		
 		selarticle.setUpdateDate(Util.getNowDateStr());
