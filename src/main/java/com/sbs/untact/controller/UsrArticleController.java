@@ -26,12 +26,12 @@ public class UsrArticleController {
 		
 		articles = new ArrayList<>();
 		
-		articles.add(new Article(++ArticlesLastId, "2021-01-26 12:12:12", "제목1", "내용1"));
-		articles.add(new Article(++ArticlesLastId, "2021-01-26 12:12:12", "제목2", "내용2"));
+		articles.add(new Article(++ArticlesLastId, "2021-01-26 12:12:12","2021-01-26 12:12:12", "제목1", "내용1"));
+		articles.add(new Article(++ArticlesLastId, "2021-01-26 12:12:12","2021-01-26 12:12:12", "제목2", "내용2"));
 		
 
 		
-	}
+	} 
 	
 	
 	
@@ -59,9 +59,10 @@ public class UsrArticleController {
 		SimpleDateFormat format1 = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss");		
 		Date time = new Date();		
 		String regDate = Util.getNowDateStr();
+		String updateDate = regDate;
 		
 		
-		articles.add(new Article(++ArticlesLastId, regDate, title, body));
+		articles.add(new Article(++ArticlesLastId, regDate, updateDate, title, body));
 		
 		Map<String, Object> rs = new HashMap<>();
 		rs.put("resultCode", "S-1");
@@ -134,7 +135,7 @@ public class UsrArticleController {
 			return rs;
 		}
 		
-		
+		selarticle.setUpdateDate(Util.getNowDateStr());
 		selarticle.setTitle(title);
 		selarticle.setBody(body);
 		

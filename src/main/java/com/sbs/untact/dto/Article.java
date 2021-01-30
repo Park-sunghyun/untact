@@ -3,21 +3,23 @@ package com.sbs.untact.dto;
 public class Article {
 	private int id;
 	private String regDate;
+	private String UpdateDate;
 	private String title;
 	private String body;
 
-	public Article(int id, String regDate, String title, String body) {
+	public Article(int id, String regDate, String UpdateDate,String title, String body) {
 	 this.id = id;
 	 this.regDate = regDate;
+	 this.UpdateDate = UpdateDate;
 	 this.title = title;
 	 this.body = body;
 	}
 	
-	
 
 	@Override
 	public String toString() {
-		return "Article [id=" + id + ", regDate=" + regDate + ", title=" + title + ", body=" + body + "]";
+		return "Article [id=" + id + ", regDate=" + regDate + ", UpdateDate=" + UpdateDate + ", title=" + title
+				+ ", body=" + body + "]";
 	}
 
 
@@ -36,6 +38,15 @@ public class Article {
 
 	public void setRegDate(String regDate) {
 		this.regDate = regDate;
+	}
+	
+
+	public String getUpdateDate() {
+		return UpdateDate;
+	}
+
+	public void setUpdateDate(String updateDate) {
+		UpdateDate = updateDate;
 	}
 
 	public String getTitle() {
