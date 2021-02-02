@@ -60,7 +60,7 @@ public class UsrArticleController {
 			return new ResultData("F-1", "body 를 입력해주세요.");
 		}
 
-		ResultData rsData = articleService.add(title, body);
+		ResultData rsData = articleService.addArticle(title, body);
 
 		return rsData;
 
@@ -105,7 +105,7 @@ public class UsrArticleController {
 			return new ResultData("F-1", String.format("%d 번 게시물은 존재하지 않습니다.", id));
 		}
 
-		return articleService.modify(id, title, body);
+		return articleService.modifyArticle(id, title, body);
 	}
 
 }
