@@ -34,9 +34,9 @@ public class UsrArticleController {
 
 	@RequestMapping("/usr/article/list")
 	@ResponseBody
-	public List<Article> showList() {
+	public List<Article> showList(String searchKeyword) {
 
-		return articleService.getArticles();
+		return articleService.getArticles(searchKeyword);
 
 	}
 	
