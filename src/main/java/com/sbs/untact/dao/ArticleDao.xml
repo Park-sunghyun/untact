@@ -26,7 +26,7 @@
 	<!-- public void addArticle(@Param(value = "title")String title, @Param(value 
 		= "body")String body); -->
 		
-	<insert id = "addArticle">
+	<insert id = "addArticle" useGeneratedKeys="true" keyProperty="id">
 	
 	insert into article
 	set regDate = now(),
