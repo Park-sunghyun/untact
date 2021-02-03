@@ -19,6 +19,17 @@
 		select *
 		from article
 		where 1
+		<if test = "searchKeywordType == 'title'">
+		and title like concat('%', #{searchKeyword} , '%')
+		</if>
+		<if test = "searchKeywordType == 'body'">
+		and `body` like concat('%', #{searchKeyword} , '%')
+		</if>
+		<if test = "searchKeywordType == 'titleAndbody'">
+		and (title like concat('%', #{searchKeyword} , '%') or `body` like concat('%', #{searchKeyword} , '%'))
+		    
+		</if>
+		
 		order by id desc
 
 	</select>
