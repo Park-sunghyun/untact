@@ -8,7 +8,8 @@
 	<select id="getArticle" resultType="Article">
 		select *
 		from article
-		where id = #{id}
+		where id
+		= #{id}
 	</select>
 
 	<!-- public List<Article> getArticles(@Param(value = "searchKeyword")String 
@@ -19,66 +20,62 @@
 		select *
 		from article
 		where 1
-		<if test = "searchKeywordType == 'title'">
-		and title like concat('%', #{searchKeyword} , '%')
+		<if test="searchKeyword != null">
+			<if test="searchKeywordType == 'title'">
+				and title like concat('%', #{searchKeyword} , '%')
+			</if>
+			<if test="searchKeywordType == 'body'">
+				and `body` like concat('%', #{searchKeyword} , '%')
+			</if>
+			<if test="searchKeywordType == 'titleAndbody'">
+				and (title like concat('%', #{searchKeyword} , '%') or `body` like
+				concat('%', #{searchKeyword} , '%'))
+
+			</if>
 		</if>
-		<if test = "searchKeywordType == 'body'">
-		and `body` like concat('%', #{searchKeyword} , '%')
-		</if>
-		<if test = "searchKeywordType == 'titleAndbody'">
-		and (title like concat('%', #{searchKeyword} , '%') or `body` like concat('%', #{searchKeyword} , '%'))
-		    
-		</if>
-		
 		order by id desc
 
 	</select>
 
 	<!-- public void addArticle(@Param(value = "title")String title, @Param(value 
 		= "body")String body); -->
-		
-	<insert id = "addArticle" useGeneratedKeys="true" keyProperty="id">
-	
-	insert into article
-	set regDate = now(),
-	updateDate = now(),
-	title = #{title},
-	`body` = #{body}
-	
-	</insert>	
+
+	<insert id="addArticle" useGeneratedKeys="true" keyProperty="id">
+
+		insert into article
+		set regDate = now(),
+		updateDate = now(),
+		title = #{title},
+		`body` = #{body}
+
+	</insert>
 
 	<!-- public void deleteArticle(@Param(value = "id")int id); -->
-    
-    <delete id = "deleteArticle">
-    
-    delete from article
-    where id = #{id}
-    
-    </delete>
+
+	<delete id="deleteArticle">
+
+		delete from article
+		where id = #{id}
+
+	</delete>
 	<!-- public void modifyArticle(@Param(value = "id")int id, @Param(value 
 		= "title")String title, @Param(value = "body")String body); -->
-		
-	<update id = "modifyArticle">
-	
-	update article
-	<set>
-	
-	<if test = "title != null || body != null" >
-	updateDate = now(),
-	</if>
-	
-	<if test = "title != null">
-	title = #{title}
-	</if>
-	<if test = "body != null">
-	`body` = #{body}
-	</if>
-	
-	
-	</set>
-	
-	where id = #{id}
-	
+
+	<update id="modifyArticle">
+
+		update article
+		<set>
+			<if test="title != null || body != null">
+				updateDate = now(),
+			</if>
+			<if test="title != null">
+				title = #{title},
+			</if>
+			<if test="body != null">
+				`body` = #{body}
+			</if>
+		</set>
+		where id = #{id}
 	</update>
 
 </mapper>
