@@ -2,6 +2,8 @@ package com.sbs.untact.controller;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,10 +26,10 @@ public class UsrMemberController {
 		if (param.get("loginId") == null) {
 			return new ResultData("F-1", "loginId를 입력해주세요.");
 		}
-		
-		Member existingMemmember = memberService.getMemberByLoginId((String)param.get("loginId"));
-		
-		if(existingMemmember != null) {
+
+		Member existingMember = memberService.getMemberByLoginId((String) param.get("loginId"));
+
+		if (existingMember != null) {
 			return new ResultData("F-2", String.format("%s (은)는 이미 사용중인 아이디 입니다.", param.get("loginId")));
 		}
 
@@ -53,9 +55,55 @@ public class UsrMemberController {
 
 		return memberService.join(param);
 	}
-	
-	
-	
-	
 
-}
+	@RequestMapping("/usr/member/doLogin")
+	@ResponseBody
+	public ResultData doLogin(String loginId, String loginPw, HttpSession session) {
+		
+		//세션에 의해 로그인 여부 확인
+		if(session.getAttribute("loginedMemberId") != null) {
+			return new ResultData("F-4", "이미 로그인 되어있습니다..");
+		}
+		
+		
+		if (loginId == null) {
+			return new ResultData("F-1", "loginId를 입력해주세요.");
+		}
+
+		Member existingMember = memberService.getMemberByLoginId(loginId);
+
+		if (existingMember == null) {
+			return new ResultData("F-2", "존재하지 않는 로그인 정보 입니다.", "loginId", loginId);
+		}
+
+		if (loginPw == null) {
+			return new ResultData("F-1", "loginPw를 입력해주세요.");
+		}
+		
+		if (existingMember.getLoginPw().equals(loginPw) == false) {
+			return new ResultData("F-3", "비밀번호가 일치하지 않습니다.");
+		}
+		
+		
+		//세션등록
+
+		session.setAttribute("loginedMemberId", existingMember.getId());
+		
+		return new ResultData("S-1", String.format("%s 님 환영합니다.",  existingMember.getNickname()));
+		
+
+	}
+	
+	@RequestMapping("/usr/member/doLogout")
+	@ResponseBody
+	public ResultData doLogout(HttpSession session) {
+		//세션에 의해 로그인 여부 확인
+		if(session.getAttribute("loginedMemberId") == null) {
+			return new ResultData("S-2", "이미 로그아웃 되어있습니다.");
+		}
+		
+		session.removeAttribute("loginedMemberId");
+		return new ResultData("S-1", "로그아웃 되었습니다.");
+	}
+	}
+
