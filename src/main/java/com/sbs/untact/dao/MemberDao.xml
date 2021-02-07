@@ -34,6 +34,34 @@
 		where loginId
 		= #{loginId}
 	</select>
+	
+	
+	<update id="modifyMember">
+
+		update member
+		<set>
+			<if test="loginPw != null || name != null || nickname != null || cellphoneNo != null || email != null">
+				updateDate = now(),
+			</if>
+			<if test="loginPw != null">
+				loginPw = #{loginPw},
+			</if>
+			<if test="name != null">
+				`name` = #{name},
+			</if>
+			<if test="nickname != null">
+				nickname = #{nickname},
+			</if>
+			<if test="cellphoneNo != null">
+				cellphoneNo = #{cellphoneNo},
+			</if>
+			<if test="email != null">
+				email = #{email},
+			</if>
+			
+		</set>
+		where id = #{id}
+	</update>
 
 
 </mapper>

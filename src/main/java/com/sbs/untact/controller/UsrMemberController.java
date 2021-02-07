@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.databind.deser.impl.CreatorCandidate.Param;
 import com.sbs.untact.dto.Member;
 import com.sbs.untact.dto.ResultData;
 import com.sbs.untact.service.MemberService;
@@ -105,5 +106,28 @@ public class UsrMemberController {
 		session.removeAttribute("loginedMemberId");
 		return new ResultData("S-1", "로그아웃 되었습니다.");
 	}
+	
+	@RequestMapping("/usr/member/doModify")
+	@ResponseBody
+	public ResultData doModify(@RequestParam Map<String, Object> param,HttpSession session) {
+		//세션에 의해 로그인 여부 확인
+		if(session.getAttribute("loginedMemberId") == null) {
+			return new ResultData("F-1", "로그인 후 이용해주세요.");
+		}
+		// isEmpty : Map 이 비어있다.
+		if (param.isEmpty()) {
+			return new ResultData("F-2", "수정 할 정보를 입력해주세요.");
+		}
+		
+		
+		
+		
+		int loginedMemberId = (int)session.getAttribute("loginedMemberId");
+		param.put("id", loginedMemberId);
+		
+		return memberService.modifyMember(param);
+		
+		
 	}
+}
 
