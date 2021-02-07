@@ -34,6 +34,21 @@ updateDate = NOW(),
 title = "제목3 입니다.",
 `body` = "내용3 입니다.";
 
+
+
+UPDATE article
+	SET updateDate = NOW(),
+	title = "제목3 입니다New",
+	`body` = "내용3 입니다New"
+	WHERE id = 9;
+	
+
+DELETE FROM article
+WHERE id = 3;
+	
+SELECT * FROM article;
+
+
 # 회원 테이블 생성
 CREATE TABLE `member` (
     id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -60,3 +75,7 @@ loginPw = "user1",
 nickname = "user1",
 cellphoneNo = "01012341234",
 email = "popol91@naver.com";
+
+
+# 게시물 테이블에 회원번호 칼럼 추가
+ALTER TABLE article ADD COLUMN memberId INT(10) UNSIGNED NOT NULL AFTER updateDate;

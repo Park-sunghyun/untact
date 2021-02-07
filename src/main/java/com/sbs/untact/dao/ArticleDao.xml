@@ -46,7 +46,8 @@
 		set regDate = now(),
 		updateDate = now(),
 		title = #{title},
-		`body` = #{body}
+		`body` = #{body},
+		memberId = #{memberId}
 
 	</insert>
 
