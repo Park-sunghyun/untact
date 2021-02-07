@@ -1,54 +1,31 @@
-#데이터베이스 생성
-DROP DATABASE IF EXISTS untact;
-CREATE DATABASE untact;
-USE untact;
-
-#게시물 테이블 생성
-
-CREATE TABLE article(
-id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-regDate DATETIME NOT NULL,
-updateDate DATETIME NOT NULL,
-title CHAR(100) NOT NULL,
-`body` TEXT NOT NULL
+# 데이터베이스 생성
+DROP DATABASE IF EXISTS untactTeacher;
+CREATE DATABASE untactTeacher;
+USE untactTeacher;
+# 게시물 테이블 생성
+CREATE TABLE article (
+    id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    regDate DATETIME NOT NULL,
+    updateDate DATETIME NOT NULL,
+    title CHAR(100) NOT NULL,
+    `body` TEXT NOT NULL
 );
-
-#게시물, 테스트 데이터 생성
-
+# 게시물, 테스트 데이터 생성
 INSERT INTO article
 SET regDate = NOW(),
 updateDate = NOW(),
 title = "제목1 입니다.",
 `body` = "내용1 입니다.";
-
 INSERT INTO article
 SET regDate = NOW(),
 updateDate = NOW(),
 title = "제목2 입니다.",
 `body` = "내용2 입니다.";
-
-
 INSERT INTO article
 SET regDate = NOW(),
 updateDate = NOW(),
 title = "제목3 입니다.",
 `body` = "내용3 입니다.";
-
-
-
-UPDATE article
-	SET updateDate = NOW(),
-	title = "제목3 입니다New",
-	`body` = "내용3 입니다New"
-	WHERE id = 9;
-	
-
-DELETE FROM article
-WHERE id = 3;
-	
-SELECT * FROM article;
-
-
 # 회원 테이블 생성
 CREATE TABLE `member` (
     id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -61,10 +38,8 @@ CREATE TABLE `member` (
     `email` CHAR(100) NOT NULL,
     `cellphoneNo` CHAR(20) NOT NULL
 );
-
 # 로그인 ID로 검색했을 때
 ALTER TABLE `member` ADD UNIQUE INDEX (`loginId`);
-
 # 회원, 테스트 데이터 생성
 INSERT INTO `member`
 SET regDate = NOW(),
@@ -74,8 +49,13 @@ loginPw = "user1",
 `name` = "user1",
 nickname = "user1",
 cellphoneNo = "01012341234",
-email = "popol91@naver.com";
-
-
+email = "jangka512@gmail.com";
 # 게시물 테이블에 회원번호 칼럼 추가
 ALTER TABLE article ADD COLUMN memberId INT(10) UNSIGNED NOT NULL AFTER updateDate;
+
+SELECT * FROM article;
+
+# 기존 게시물의 작성자를 회원1로 지정
+UPDATE article
+SET memberId = 1
+WHERE memberId = 0;
