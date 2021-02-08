@@ -37,5 +37,12 @@ public class MemberService {
 		memberDao.modifyMember(param);
 		return new ResultData("S-1", "회원정보 가 수정되었습니다.");
 	}
+    
+	
+	// 관리자 번호 는 1번으로 지정 
+	public boolean isAdmin(int actorId) {
+		
+		return actorId == 1;
+	}
 
 }

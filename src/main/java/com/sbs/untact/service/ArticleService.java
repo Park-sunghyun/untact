@@ -14,7 +14,9 @@ import com.sbs.untact.util.Util;
 @Service
 public class ArticleService {
 	@Autowired
-	private ArticleDao articleDao; 
+	private ArticleDao articleDao;
+	@Autowired
+	private MemberService memberService; 
 
 	public Article getArticle(int id) {
 
@@ -50,6 +52,41 @@ public class ArticleService {
 	public List<Article> getArticles(String searchKeyword, String searchKeywordType) {
 		
 		return articleDao.getArticles(searchKeyword, searchKeywordType);
+	}
+
+
+	public ResultData getActorCanModifyRd(Article article, int actorId) {
+		
+		// 회원
+		if (article.getMemberId() == actorId) {
+			return new ResultData("S-1", "가능합니다.");
+		}
+		
+		// 관리자 
+		if (memberService.isAdmin(actorId)) {
+			return new ResultData("S-2", "가능합니다.");
+		}
+		
+		
+		return new ResultData("F-1", "권한이 없습니다..");
+	}
+
+
+	public ResultData getActorCanDeleteRd(Article article, int actorId) {
+		
+		return getActorCanModifyRd(article,actorId);
+	}
+
+
+	public Article getForPrintArticle(int id) {
+		
+		return articleDao.getForPrintArticle(id);
+	}
+
+
+	public List<Article> getForPrintArticles(String searchKeyword, String searchKeywordType) {
+		
+		return articleDao.getForPrintArticles(searchKeyword, searchKeywordType);
 	}
 
 }

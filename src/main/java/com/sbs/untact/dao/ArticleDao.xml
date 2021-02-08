@@ -28,7 +28,8 @@
 				and `body` like concat('%', #{searchKeyword} , '%')
 			</if>
 			<if test="searchKeywordType == 'titleAndbody'">
-				and (title like concat('%', #{searchKeyword} , '%') or `body` like
+				and (title like concat('%', #{searchKeyword} , '%') or
+				`body` like
 				concat('%', #{searchKeyword} , '%'))
 
 			</if>
@@ -45,7 +46,8 @@
 		insert into article
 		set regDate = now(),
 		updateDate = now(),
-		title = #{title},
+		title =
+		#{title},
 		`body` = #{body},
 		memberId = #{memberId}
 
@@ -78,5 +80,46 @@
 		</set>
 		where id = #{id}
 	</update>
+
+	<!-- public Article getForPrintArticle(@Param("id") int id) -->
+
+	<select id="getForPrintArticle" resultType="Article">
+
+		select a.*,
+		ifnull(m.nickname, "탈퇴회원") as extra_writer
+		from article as a
+		left join `member` as m
+		on a.memberId = m.id
+		where a.id = #{id}
+	</select>
+
+
+
+	<select id="getForPrintArticles" resultType="Article">
+		select a.*,
+		ifnull(m.nickname, "탈퇴회원") as extra_writer
+		from article as a
+		left join `member` as m
+		on a.memberId = m.id
+		where 1
+		<if test="searchKeyword != null">
+			<if test="searchKeywordType == 'title'">
+				and a.title like concat('%', #{searchKeyword} , '%')
+			</if>
+			<if test="searchKeywordType == 'body'">
+				and a.`body` like concat('%', #{searchKeyword} , '%')
+			</if>
+			<if test="searchKeywordType == 'titleAndbody'">
+				and (a.title like concat('%', #{searchKeyword} , '%') or
+				a.`body` like
+				concat('%', #{searchKeyword} , '%'))
+
+			</if>
+		</if>
+		order by a.id desc
+
+	</select>
+
+
 
 </mapper>

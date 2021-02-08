@@ -23,16 +23,25 @@ public class UsrArticleController {
 
 	@RequestMapping("/usr/article/detail")
 	@ResponseBody
-	public Article showDetail(int id) {
-		Article article = articleService.getArticle(id);
+	public ResultData showDetail(Integer id) {
+		
+		if(id == null) {
+			return new ResultData("F-1", "id 를 입력해주세요.");
+		}
+		
+		Article article = articleService.getForPrintArticle(id);
+		
+		if(article == null) {
+			return new ResultData("F-2", "존재하지 않는 게시물 번호 입니다.");
+		}
 
-		return article;
+		return new ResultData("S-1", "성공.", "article", article);
 
 	}
 
 	@RequestMapping("/usr/article/list")
 	@ResponseBody
-	public List<Article> showList(String searchKeywordType, String searchKeyword) {
+	public ResultData showList(String searchKeywordType, String searchKeyword) {
 
 		if (searchKeywordType != null) {
 			searchKeywordType = searchKeywordType.trim();
@@ -50,17 +59,19 @@ public class UsrArticleController {
 			searchKeyword = searchKeyword.trim();
 		}
 
-		return articleService.getArticles(searchKeyword, searchKeywordType);
+		List<Article> articles = articleService.getForPrintArticles(searchKeyword, searchKeywordType);
+		
+		return new ResultData("S-1", "성공", "articles", articles );
 
 	}
 
 	@RequestMapping("/usr/article/doAdd")
 	@ResponseBody
 	public ResultData doAdd(@RequestParam Map<String, Object> param, HttpSession session) {
-		
+
 		int loginedMemberId = Util.getAsInt(session.getAttribute("loginedMemberId"), 0);
-		
-		if(loginedMemberId == 0) {
+
+		if (loginedMemberId == 0) {
 			return new ResultData("F-2", "로그인 후 이용해주세요.");
 		}
 
@@ -70,20 +81,24 @@ public class UsrArticleController {
 		if (param.get("body") == null) {
 			return new ResultData("F-1", "body 를 입력해주세요.");
 		}
-		
+
 		// param 에 loginedMemberId 정보 추가, param 엔 title,body 등 글의 정보만 있고
 		// 로그인 한 회원 의 정보는 없음
 		param.put("memberId", loginedMemberId);
 
 		return articleService.addArticle(param);
 
-		
-
 	}
 
 	@RequestMapping("/usr/article/doDelete")
 	@ResponseBody
-	public ResultData doDelete(Integer id) {
+	public ResultData doDelete(Integer id, HttpSession session) {
+		
+		int loginedMemberId = Util.getAsInt(session.getAttribute("loginedMemberId"), 0);
+
+		if (loginedMemberId == 0) {
+			return new ResultData("F-2", "로그인 후 이용해주세요.");
+		}
 
 		if (id == null) {
 			return new ResultData("F-1", "id 를 입력해주세요.");
@@ -94,6 +109,12 @@ public class UsrArticleController {
 		if (article == null) {
 			return new ResultData("F-1", "해당 게시물은 존재하지 않습니다.");
 		}
+		
+		ResultData actorCanDeleteRd = articleService.getActorCanDeleteRd(article, loginedMemberId);
+		
+		if (actorCanDeleteRd.isFail()) {
+			return actorCanDeleteRd;
+		}
 
 		return articleService.deleteArticle(id);
 
@@ -101,7 +122,13 @@ public class UsrArticleController {
 
 	@RequestMapping("/usr/article/doModify")
 	@ResponseBody
-	public ResultData doModify(Integer id, String title, String body) {
+	public ResultData doModify(Integer id, String title, String body, HttpSession session) {
+
+		int loginedMemberId = Util.getAsInt(session.getAttribute("loginedMemberId"), 0);
+
+		if (loginedMemberId == 0) {
+			return new ResultData("F-2", "로그인 후 이용해주세요.");
+		}
 
 		if (id == null) {
 			return new ResultData("F-1", "id 를 입력해주세요.");
@@ -118,6 +145,14 @@ public class UsrArticleController {
 
 		if (article == null) {
 			return new ResultData("F-1", String.format("%d 번 게시물은 존재하지 않습니다.", id));
+		}
+		
+		// 회원에 따른 게시물 권한 체크
+		ResultData actorCanModifyRd = articleService.getActorCanModifyRd(article, loginedMemberId);
+		
+		
+		if (actorCanModifyRd.isFail()) {
+			return actorCanModifyRd;
 		}
 
 		return articleService.modifyArticle(id, title, body);
