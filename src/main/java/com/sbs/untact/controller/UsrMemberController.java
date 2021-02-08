@@ -60,13 +60,7 @@ public class UsrMemberController {
 	@RequestMapping("/usr/member/doLogin")
 	@ResponseBody
 	public ResultData doLogin(String loginId, String loginPw, HttpSession session) {
-		
-		//세션에 의해 로그인 여부 확인
-		if(session.getAttribute("loginedMemberId") != null) {
-			return new ResultData("F-4", "이미 로그인 되어있습니다..");
-		}
-		
-		
+			
 		if (loginId == null) {
 			return new ResultData("F-1", "loginId를 입력해주세요.");
 		}
@@ -98,10 +92,6 @@ public class UsrMemberController {
 	@RequestMapping("/usr/member/doLogout")
 	@ResponseBody
 	public ResultData doLogout(HttpSession session) {
-		//세션에 의해 로그인 여부 확인
-		if(session.getAttribute("loginedMemberId") == null) {
-			return new ResultData("S-2", "이미 로그아웃 되어있습니다.");
-		}
 		
 		session.removeAttribute("loginedMemberId");
 		return new ResultData("S-1", "로그아웃 되었습니다.");
@@ -110,18 +100,12 @@ public class UsrMemberController {
 	@RequestMapping("/usr/member/doModify")
 	@ResponseBody
 	public ResultData doModify(@RequestParam Map<String, Object> param,HttpSession session) {
-		//세션에 의해 로그인 여부 확인
-		if(session.getAttribute("loginedMemberId") == null) {
-			return new ResultData("F-1", "로그인 후 이용해주세요.");
-		}
 		// isEmpty : Map 이 비어있다.
 		if (param.isEmpty()) {
 			return new ResultData("F-2", "수정 할 정보를 입력해주세요.");
 		}
 		
-		
-		
-		
+			
 		int loginedMemberId = (int)session.getAttribute("loginedMemberId");
 		param.put("id", loginedMemberId);
 		
