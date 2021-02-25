@@ -60,6 +60,8 @@ public class UsrMemberController {
 	@RequestMapping("/usr/member/doLogin")
 	@ResponseBody
 	public ResultData doLogin(String loginId, String loginPw, HttpSession session) {
+		
+		
 			
 		if (loginId == null) {
 			return new ResultData("F-1", "loginId를 입력해주세요.");

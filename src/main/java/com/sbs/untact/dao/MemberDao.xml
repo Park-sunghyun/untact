@@ -24,7 +24,7 @@
 	<select id="getMember" resultType="Member">
 		select *
 		from member
-		where loginId
+		where id
 		= #{id}
 	</select>
 	

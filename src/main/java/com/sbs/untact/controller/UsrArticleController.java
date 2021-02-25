@@ -58,6 +58,10 @@ public class UsrArticleController {
 		if (searchKeyword != null) {
 			searchKeyword = searchKeyword.trim();
 		}
+		
+		if (searchKeyword == null) {
+			searchKeywordType = null;
+		}
 
 		List<Article> articles = articleService.getForPrintArticles(searchKeyword, searchKeywordType);
 		
