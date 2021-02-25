@@ -117,6 +117,10 @@
 			</if>
 		</if>
 		order by a.id desc
+		<if test="limitStart != null and limitTake != null">
+		limit #{limitStart}, #{limitTake}
+		</if>
+		
 
 	</select>
 

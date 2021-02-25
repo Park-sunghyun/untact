@@ -23,7 +23,7 @@ public interface ArticleDao {
 
 	public Article getForPrintArticle(@Param("id") int id);
 
-	public List<Article> getForPrintArticles(@Param(value = "searchKeyword")String searchKeyword, @Param(value = "searchKeywordType")String searchKeywordType);
+	public List<Article> getForPrintArticles(@Param("searchKeyword")String searchKeyword, @Param(value = "searchKeywordType")String searchKeywordType, @Param("limitStart") int limitStart, @Param("limitTake") int limitTake );
 	
 	
 
